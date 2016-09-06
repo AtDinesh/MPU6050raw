@@ -8,6 +8,7 @@
 HardWire HWire(1, I2C_FAST_MODE); // I2c1 I2C_FAST_MODE
 const int MPU_addr=0x68;//0x69;  // I2C address of the MPU-6050
 int16_t AcX,AcY,AcZ,Tmp,GyX,GyY,GyZ;
+unsigned char buffC[14]={0};
 int loop_time=0;
 int t_tmp = 0;
 int i;
@@ -37,6 +38,7 @@ void setup() {
 
 void loop() {
   unsigned char flag_send_raw = 0;
+  unsigned char flag_write_serial = 0;
   while(1)
   {
     if (Serial.available())
@@ -52,7 +54,12 @@ void loop() {
           break;
         case 'R':
           flag_send_raw = 0;
-        break;
+          break;
+        case 'w' :
+          flag_write_serial = 1;
+          break;
+        case 'W' :
+          flag_write_serial = 0;
       }
     }
  
@@ -71,6 +78,25 @@ void loop() {
     Serial.print(","); Serial.print(GyY);
     Serial.print(","); Serial.print(GyZ);
     Serial.print("\n");
+  }
+
+  if (flag_send_raw)
+  {
+    buffC[0]=0x47;
+    buffC[1]=AcX&0xff;
+    buffC[2]=(AcX>>8)&0xff;
+    buffC[3]=AcY&0xff;
+    buffC[4]=(AcY>>8)&0xff;
+    buffC[5]=AcZ&0xff;
+    buffC[6]=(AcZ>>8)&0xff;
+    buffC[7]=GyX&0xff;
+    buffC[8]=(GyX>>8)&0xff;
+    buffC[9]=GyY&0xff;
+    buffC[10]=(GyY>>8)&0xff;
+    buffC[11]=GyZ&0xff;
+    buffC[12]=(GyZ>>8)&0xff;
+
+    Serial.write(buffC,13);
   }
 
   while(micros()<next_time) delayMicroseconds(1); //1khz
