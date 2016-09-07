@@ -1,8 +1,27 @@
+r 
 
 #include <HardWire.h>
 
 //Pin MAP
-#define LED_PIN PB1    
+#define LED_PIN PB1
+
+#define MPU6050_GYRO_FS_250         0x00
+#define MPU6050_GYRO_FS_500         0x01
+#define MPU6050_GYRO_FS_1000        0x02
+#define MPU6050_GYRO_FS_2000        0x03
+
+#define MPU6050_ACCEL_FS_2          0x00
+#define MPU6050_ACCEL_FS_4          0x01
+#define MPU6050_ACCEL_FS_8          0x02
+#define MPU6050_ACCEL_FS_16         0x03
+
+#define MPU6050_GCONFIG_FS_SEL_BIT      4
+#define MPU6050_GCONFIG_FS_SEL_LENGTH   2
+#define MPU6050_ACONFIG_AFS_SEL_BIT         4
+#define MPU6050_ACONFIG_AFS_SEL_LENGTH      2
+
+#define MPU6050_RA_GYRO_CONFIG      0x1B
+#define MPU6050_RA_ACCEL_CONFIG     0x1C
 
 
 HardWire HWire(1, I2C_FAST_MODE); // I2c1 I2C_FAST_MODE
@@ -29,6 +48,16 @@ void setup() {
   HWire.beginTransmission(MPU_addr);
   HWire.write(0x6B);  // PWR_MGMT_1 register
   HWire.write(0);     // set to zero (wakes up the MPU-6050)
+
+  delay(1000);
+  //setup imu
+  //setting full scale Accelerometer to 4g
+  HWire.beginTransmission(MPU_addr);
+  HWire.write(MPU6050_RA_ACCEL_CONFIG);
+  HWire.write(MPU6050_ACCEL_FS_4);
+  
+  //writeBits(MPU_addr, MPU6050_RA_ACCEL_CONFIG, MPU6050_ACONFIG_AFS_SEL_BIT, MPU6050_ACONFIG_AFS_SEL_LENGTH, MPU6050_ACCEL_FS_4);
+  
   HWire.endTransmission();
   digitalWrite(LED_PIN, LOW);
 
@@ -38,7 +67,7 @@ void setup() {
 
 void loop() {
   unsigned char flag_send_raw = 0;
-  unsigned char flag_write_serial = 0;
+  unsigned char flag_write_serial = 1;
   while(1)
   {
     if (Serial.available())
@@ -80,7 +109,7 @@ void loop() {
     Serial.print("\n");
   }
 
-  if (flag_send_raw)
+  if (flag_write_serial)
   {
     buffC[0]=0x47;
     buffC[1]=AcX&0xff;
@@ -141,6 +170,7 @@ void print_help()
  Serial.println(" h: Help ");
  Serial.println(" r: send RAW data at 1Khz (Ax,Ay,Az,Temp,Gx,Gy,Gz)");
  Serial.println(" R: stop sending raw data");
+ Serial.println(" w: send raw data at 1KHz (Ax,Ay,Az,Gx,Gy,Gz) through USB");
+ Serial.println(" W: stop sending raw data on USB");
 }
-
 
