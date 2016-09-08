@@ -1,5 +1,3 @@
-r 
-
 #include <HardWire.h>
 
 //Pin MAP
@@ -48,15 +46,16 @@ void setup() {
   HWire.beginTransmission(MPU_addr);
   HWire.write(0x6B);  // PWR_MGMT_1 register
   HWire.write(0);     // set to zero (wakes up the MPU-6050)
+  HWire.endTransmission();
 
   delay(1000);
   //setup imu
   //setting full scale Accelerometer to 4g
-  HWire.beginTransmission(MPU_addr);
-  HWire.write(MPU6050_RA_ACCEL_CONFIG);
-  HWire.write(MPU6050_ACCEL_FS_4);
+  //HWire.beginTransmission(MPU_addr);
+  //HWire.write(MPU6050_RA_ACCEL_CONFIG);
+  //HWire.write(MPU6050_ACCEL_FS_4);
   
-  //writeBits(MPU_addr, MPU6050_RA_ACCEL_CONFIG, MPU6050_ACONFIG_AFS_SEL_BIT, MPU6050_ACONFIG_AFS_SEL_LENGTH, MPU6050_ACCEL_FS_4);
+  writeBits(MPU_addr, MPU6050_RA_ACCEL_CONFIG, MPU6050_ACONFIG_AFS_SEL_BIT, MPU6050_ACONFIG_AFS_SEL_LENGTH, MPU6050_ACCEL_FS_4);
   
   HWire.endTransmission();
   digitalWrite(LED_PIN, LOW);
@@ -67,7 +66,7 @@ void setup() {
 
 void loop() {
   unsigned char flag_send_raw = 0;
-  unsigned char flag_write_serial = 1;
+  unsigned char flag_write_serial = 0;
   while(1)
   {
     if (Serial.available())
