@@ -131,12 +131,12 @@ int main(int argc, char *argv[])
 	if (buf[0]==0x47){
 		read(fd, buf, 12);
 		#ifdef NORMALIZED_LH
-		Ax   = (double)((int16_t)((buf[1]<<8)|buf[0]))*(2.0/32768.0);
-       	Ay   = (double)((int16_t)((buf[3]<<8)|buf[2]))*(2.0/32768.0);
-       	Az   = (double)((int16_t)((buf[5]<<8)|buf[4]))*(2.0/32768.0);
-       	Gx   = (double)((int16_t)((buf[7]<<8)|buf[6]))*(250.0/32768.0);
-       	Gy   = (double)((int16_t)((buf[9]<<8)|buf[8]))*(250.0/32768.0);
-       	Gz   = (double)((int16_t)((buf[11]<<8)|buf[10]))*(250.0/32768.0);
+		Ax   = (double)((int16_t)((buf[1]<<8)|buf[0]))*(Acc_scale/32768.0);
+       	Ay   = (double)((int16_t)((buf[3]<<8)|buf[2]))*(Acc_scale/32768.0);
+       	Az   = (double)((int16_t)((buf[5]<<8)|buf[4]))*(Acc_scale/32768.0);
+       	Gx   = (double)((int16_t)((buf[7]<<8)|buf[6]))*(Gyro_scale/32768.0);
+       	Gy   = (double)((int16_t)((buf[9]<<8)|buf[8]))*(Gyro_scale/32768.0);
+       	Gz   = (double)((int16_t)((buf[11]<<8)|buf[10]))*(Gyro_scale/32768.0);
 		printf("%lf\t%lf\t%lf\t%lf\t%lf\t%lf\t%lf\n",current_time,Ax, Ay, Az, Gx, Gy, Gz);
 		#endif
 		#ifdef RAW_IMU_LH
