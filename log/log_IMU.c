@@ -37,9 +37,9 @@ int main(int argc, char *argv[])
 			return 1;
    }
 
-	double Acc_scale  = (double)argv[1];
-	double Gyro_scale = (double)argv[2];
-	int time_stop     = (int)argv[3];
+	const double Acc_scale  = (double)argv[1];
+	const double Gyro_scale = (double)argv[2];
+	const int time_stop     = (int)argv[3];
   
 
   bool save_file = true;
@@ -49,12 +49,12 @@ int main(int argc, char *argv[])
   int i;
   FILE * logFile;
   unsigned char buf[64] = {0};
-	double gravity        = 9.81;
-	double sec_to_rad     = 3.14159265359/180.0;
-	double accel_LSB      = Acc_scale/32768.0;
-	double gyro_LSB       = Gyro_scale/32768.0;
-	double accel_LSB_g    = accel_LSB * gravity;
-	double gyro_LSB_rad   = gyro_LSB * sec_to_rad;
+	const double gravity        = 9.81;
+	const double sec_to_rad     = 3.14159265359/180.0;
+	const double accel_LSB      = Acc_scale/32768.0;
+	const double gyro_LSB       = Gyro_scale/32768.0;
+	const double accel_LSB_g    = accel_LSB * gravity;
+	const double gyro_LSB_rad   = gyro_LSB * sec_to_rad;
   double Ax, Ay, Az, Gx, Gy, Gz;
   int16_t Axi, Ayi, Azi, Gxi, Gyi, Gzi;
 
