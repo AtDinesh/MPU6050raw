@@ -26,12 +26,12 @@ The MPU is set to work at full scale 4g (accelerometer) and 250 degree/sec (gyro
 you can either receive data in ASCII (to plot using arduino 1.6.11) or receive data on USB ports.
 Once received on USB, the log program will convert data into m/sec^2 for accelerometer and rad/sec for gyroscope. These conversions are done using constant variables with double precision.
 
-## Building:
+### Building:
 
 For log programs :
  - Open Terminal and go in the log folder
  - run 'gcc -o <wished_program_name> log_IMU_4g.c'
 Replace <wished_program_name> with the name that you want for the output program.
 
-## Running:
+### Running:
 run <wished_program_name> <output_file>.txt
